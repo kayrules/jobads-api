@@ -14,7 +14,10 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
 FROM alpine:latest  
 RUN apk --no-cache add ca-certificates
+RUN ip -4 route list match 0/0 | awk '{print $3 " host.docker.internal"}' >> /etc/hosts
 WORKDIR /root/
 
 COPY --from=0 /Users/kayrules/Projects/go/gopath/src/github.com/kayrules/jobads-api/main .
+
+EXPOSE 9010
 CMD ["./main"]
